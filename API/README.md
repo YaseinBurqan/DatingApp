@@ -1,4 +1,4 @@
-# DatingApp
+# DatingApp API
 
 ## DotNet Commands :
 
