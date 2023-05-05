@@ -56,12 +56,12 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            existingUser.UserName = user.UserName; // Update the name of the user
+            existingUser.Username = user.Username; // Update the name of the user
 
             try
             {
                 await _context.SaveChangesAsync();
-                return Ok(existingUser.UserName); // Return the new name of the user
+                return Ok(existingUser.Username); // Return the new name of the user
             }
             catch (DbUpdateConcurrencyException)
             {
