@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using API.Models;
 
 namespace API.Models.Data
 {
@@ -8,11 +7,6 @@ namespace API.Models.Data
         public DataContext(DbContextOptions<DataContext> options)
             : base(options) { }
 
-        public DbSet<AppUser> AppUsers { get; set; }
-
-        internal Task FindAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public DbSet<User> Users { get; set; }
     }
 }

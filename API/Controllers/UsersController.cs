@@ -2,12 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using API.Models.Data;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    [Authorize]
+    public class UsersController : BaseApiController
     {
         private readonly DataContext _context;
 
@@ -16,23 +16,22 @@ namespace API.Controllers
             _context = context;
         }
 
-        // GET: api/Users
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            if (_context.AppUsers == null)
+            if (_context.Users == null)
             {
                 return NotFound();
             }
-            var users = await _context.AppUsers.ToListAsync();
+            var users = await _context.Users.ToListAsync();
             return users;
         }
 
-        // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AppUser>> GetUser(int id)
+        public async Task<ActionResult<User>> GetUser(int id)
         {
-            var user = await _context.AppUsers.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
 
             if (user == null)
             {
@@ -43,14 +42,14 @@ namespace API.Controllers
 
         // PUT: api/Users/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, AppUser user)
+        public async Task<IActionResult> PutUser(int id, User user)
         {
             if (id != user.Id)
             {
                 return BadRequest();
             }
 
-            var existingUser = await _context.AppUsers.FindAsync(id);
+            var existingUser = await _context.Users.FindAsync(id);
             if (existingUser == null)
             {
                 return NotFound();
@@ -78,30 +77,30 @@ namespace API.Controllers
 
         // POST: api/Users
         [HttpPost]
-        public async Task<ActionResult<AppUser>> PostUser(AppUser user)
+        public async Task<ActionResult<User>> PostUser(User user)
         {
-            _context.AppUsers.Add(user);
+            _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<AppUser>> DeleteUser(int id)
+        public async Task<ActionResult<User>> DeleteUser(int id)
         {
-            var user = await _context.AppUsers.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
-            _context.AppUsers.Remove(user);
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
         private bool UserExists(int id)
         {
-            return (_context.AppUsers?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
