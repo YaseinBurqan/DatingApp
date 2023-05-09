@@ -89,13 +89,22 @@ namespace API.Controllers
         public async Task<ActionResult<User>> DeleteUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
+
             if (user == null)
             {
                 return NotFound();
             }
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-            return NoContent();
+
+            try
+            {
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+                return Ok($"{user.Username}, Has been deleted");
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
 
         private bool UserExists(int id)
